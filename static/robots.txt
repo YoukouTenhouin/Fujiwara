@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /thread/edit/*
+Disallow: /post/edit/*
+Disallow: /new
+Disallow: /search
+Disallow: /404.html
+Disallow: /50x.html
+Allow: /thread/view/*
+Allow: /tag/*
+Allow: /tags

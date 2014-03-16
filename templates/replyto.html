@@ -1,0 +1,28 @@
+{% extends user.html %}
+
+{% block title %}回复提醒{% end %}
+
+{% block user_content %}
+
+{% import Fujiwara.avatar %}
+
+<ul id="reply_list" type="none">
+      {% for i in notifications %}
+      {% set thread = i[0] %}
+      {% set author = i[2] %}
+      {% set post = i[1] %}
+  <li>
+    <div class="replist_img">
+      <img src="{{ Fujiwara.avatar.avatar(author) }}?size=80">
+    </div>
+    <a href="/thread/view/{{ thread['_id'] }}">
+      <div class="replist_text">
+          <span style="color:blue;">{{ author['name'] }}</span>在<span style="color:blue">{{ thread['title'] }}</span>回复了你
+      </div>
+    </a>
+  </li>
+      {% end %}
+</ul>
+    {% include pager.html %}
+
+{% end %}

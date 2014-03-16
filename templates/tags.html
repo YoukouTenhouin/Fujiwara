@@ -1,0 +1,17 @@
+{% extends base.html %}
+
+{% block title %}All Tags{% end %}
+
+{% block content %}
+<ul id="tags">
+  {% for i in tags %}
+  <li class="tag_element">
+    <a href="/tag/{{ i }}">{{ i }}</a>
+  </li>
+  {% end %}
+</ul>
+
+{% set pager_prefix = "/tags/" %}
+{% include pager.html %}
+
+{% end %}

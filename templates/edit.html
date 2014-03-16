@@ -1,0 +1,49 @@
+{% extends base.html %}
+
+{% block title %}编辑{% if edit_thread %}:{{ thread['title'] }}{% end %}{% end %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <h1>编辑</h1>
+    <form role="form" id="edit_form">
+      {% if edit_thread %}
+      <div class="form-group">
+        <label>标题</label>
+        <input type="text" value="{{ thread['title']}}" class="form-control" id='title' placeholder="Title" style="font-size:18px;" required>
+      </div>
+      <div class="form-group">
+        <label>标签</label>
+        <input type="text" value="{{ ",".join(thread['tags']) }}" class="form-control" id='tags' placeholder="Tags" style="font-size:18px;" required>
+        <p class="help-block">以,（半角）分隔标签</p>
+      </div>
+      {% else %}
+      <div class="form-group">
+        <label>正文</label>
+        <textarea class="form-control" name='content' id="content" placeholder="Content" rows="9" style="font-size:18px;">{{ post['content'] }}</textarea>
+      </div>
+      {% end %}
+      <button type="button" id="submit" class="btn btn-primary">确认</button>
+    </form>
+  </div>
+
+  <div class="col-md-3"></div>
+</div>
+
+{% end %}
+
+{% block custom_js %}
+<script>
+{% if not edit_thread %}
+pid = "{{ post['_id'] }}";
+{% end %}
+tid = "{{ post['th'] }}";
+</script>
+{% if edit_thread %}
+<script src="/static/js/edit_thread.js"></script>
+{% else %}
+<script src="/static/js/edit_post.js"></script>
+{% end %}
+{% end %}

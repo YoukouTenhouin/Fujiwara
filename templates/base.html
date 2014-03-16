@@ -1,0 +1,69 @@
+{% include settings.html %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% end %} -- {{ TitleSuffix }}</title>
+    
+    <link href="/static/css/yeti.min.css" rel="stylesheet">
+    <link href="/static/css/pygments.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/base.css">
+    {% block custom_css %}{% end %}
+        
+  </head>
+  
+  <body>
+
+    {% include login.html %}
+
+    {% include register.html %}
+    
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">{{ SiteTitle }}</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="/all">全部</a></li>
+          <li><a href="/tags">所有标签</a></li>
+          <li><a href="/new">新主题</a></li>
+        </ul>
+        
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="javascript:;" id="login_navbar">登录</a></li>
+          <li><a href="javascript:;" id="reg_navbar">注册</a></li>
+          <li class="dropdown" id="nav_user">
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" id="nav_user_link"><span></span>
+              <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="/user">用户中心</a></li>
+              <li><a href="javascript:;" id="logout_link">注销</a></li>
+            </ul>
+          </li>
+          <li><a> </a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <header>
+      <h1>{% raw SiteTitle %}</h1>
+      <h3>{% raw SiteSubTitle %}</h3>
+    </header>
+    
+    <div class="container" id="pagebody">
+          {% block content %}{% end %}
+    </div>
+
+    <footer>
+      PS：本网站的文章，不管是赞扬，批评，还是技术性的探讨，都是具有很大价值的内容，且都能逆向运行。
+    </footer>
+    
+    <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/user.js"></script>
+    {% block custom_js %}{% end %}
+  </body>
+</html>
+

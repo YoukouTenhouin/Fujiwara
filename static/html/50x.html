@@ -1,0 +1,139 @@
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>HBall Unavailable -- 耻球学派</title>
+<link href="/static/css/yeti.min.css" rel="stylesheet">
+<link href="/static/css/pygments.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/base.css">
+
+</head>
+<body>
+<!-- Modal -->
+<div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<h4 class="modal-title">登录</h4>
+</div>
+<div class="modal-body">
+<div class="alert alert-danger" id="login_alert">
+<strong>Oops!</strong>用户名不存在或者密码错误。
+</div>
+<form class="form-horizontal" role="form">
+<div class="form-group">
+<label class="col-sm-2 control-label">用户名</label>
+<div class="col-sm-10">
+<input class="form-control" id="login_user" placeholder="User name">
+</div>
+</div>
+<div class="form-group">
+<label class="col-sm-2 control-label">密码</label>
+<div class="col-sm-10">
+<input type="password" class="form-control" id="login_pwd" placeholder="Password">
+</div>
+</div>
+</form>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+<button type="button" id='submit_login' class="btn btn-primary">登录</button>
+</div>
+</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="reg_modal">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<h4 class="modal-title">注册</h4>
+</div>
+<div class="modal-body">
+<div class="alert alert-danger" id="exists_alert">
+<strong>Oops!</strong>该用户已存在。换个用户名试试？
+</div>
+<div class="alert alert-danger" id="not_filled_alert">
+<strong>你没填完表单。</strong>别着急，慢慢来……
+</div>
+<form class="form-horizontal" role="form">
+<div class="form-group">
+<label class="col-sm-2 control-label">邮箱</label>
+<div class="col-sm-10">
+<input type="email" class="form-control" id="reg_email" placeholder="Email" required>
+</div>
+</div>
+<div class="form-group">
+<label class="col-sm-2 control-label">用户名</label>
+<div class="col-sm-10">
+<input class="form-control" id="reg_user" placeholder="User name" required>
+</div>
+</div>
+<div class="form-group">
+<label class="col-sm-2 control-label">密码</label>
+<div class="col-sm-10">
+<input type="password" class="form-control" id="reg_pwd" placeholder="Password" required>
+</div>
+</div>
+</form>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+<button type="button" id='submit_reg' class="btn btn-primary">注册</button>
+</div>
+</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<div class="navbar-header">
+<a class="navbar-brand" href="/">耻球学派<sup>beta</sup></a>
+</div>
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<ul class="nav navbar-nav">
+<li><a href="/all">全部</a></li>
+<li><a href="/tags">所有标签</a></li>
+<li><a href="/new">新主题</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li><a href="javascript:;" id="login_navbar">登录</a></li>
+<li><a href="javascript:;" id="reg_navbar">注册</a></li>
+<li class="dropdown" id="nav_user">
+<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" id="nav_user_link"><span></span>
+<b class="caret"></b></a>
+<ul class="dropdown-menu">
+<li><a href="/user">用户中心</a></li>
+<li><a href="javascript:;" id="logout_link">注销</a></li>
+</ul>
+</li>
+<li><a> </a></li>
+</ul>
+</div>
+</nav>
+<header>
+<h1>耻球学派<sup>gamma</sup></h1>
+<h3>Does it run backwards?</h3>
+</header>
+<div class="container" id="pagebody">
+
+<div>
+<h1>HBall is unavailable</h1>
+<p>We are temporarily unable to service your request for HBall because we detacted you are not able to run backwards.</p>
+<p>Please try again in 10<sup>-42</sup> millseconds.</p>
+</div>
+
+</div>
+<footer>
+PS：本网站的文章，不管是赞扬，批评，还是技术性的探讨，都是具有很大价值的内容，且都能逆向运行。
+</footer>
+<script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/user.js"></script>
+
+</body>
+</html>

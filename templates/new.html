@@ -1,0 +1,40 @@
+{% extends base.html %}
+
+{% block title %}新主题{% end %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <h1>新主题</h1>
+    <div class="alert alert-danger" id="thread_notitle_alert" style="display:none;">
+      <strong>请填写标题。</strong>馒馒来，别急着发帖……
+    </div>
+    <div class="alert alert-danger" id="thread_notlogin_alert" style="display:none;">
+      <strong>你没登录。</strong>请先登录再发贴。
+    </div>
+    <form role="form" id="new_thread_form">
+      <div class="form-group">
+        <label>标题</label>
+        <input type="text" class="form-control" id='title' placeholder="Title" style="font-size:18px;" required>
+      </div>
+      <div class="form-group">
+        <label>标签</label>
+        <input type="text" class="form-control" id='tags' placeholder="Tags" style="font-size:18px;" required>
+        <p class="help-block">以,（半角）分隔标签</p>
+      </div>
+      <div class="form-group">
+        <label>正文</label>
+        <textarea class="form-control" id="content" placeholder="Content" rows="9" style="font-size:18px;"></textarea>
+      </div>
+      <button type="button" id="submit" class="btn btn-primary">发表</button>
+    </form>
+  </div>
+  
+  <div class="col-md-3"></div>
+</div>
+{% end %}
+
+{% block custom_js %}
+<script src="/static/js/new.js"></script>
+{% end %}

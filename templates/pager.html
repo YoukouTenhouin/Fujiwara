@@ -1,0 +1,8 @@
+<ul class="pager">
+  {% if pn != 1 %}
+  <li><a href="{{ pager_prefix }}/{{ pn - 1 }}"><</a></li>
+  {% end %}
+  {% if pn < max_pn %}
+  <li><a href="{{ pager_prefix }}/{{ pn + 1 }}">></a></li>
+  {% end %}
+</ul>
