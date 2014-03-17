@@ -7,7 +7,7 @@ class User(Base):
     def get(self):
         cookie = self.get_cookie('userinfo')
         if not self.auth.vaild(cookie):
-            self.write('<html><head><script>window.location.pathname="/"</script></head></html>')
+            self.redirect('/')
             return
 
         uid = self.auth.decodeData(cookie)['uid']
@@ -26,7 +26,7 @@ class ReplyNotifications(Base):
             
         cookie = self.get_cookie('userinfo')
         if not self.auth.vaild(cookie):
-            self.write('<html><head><script>window.location.pathname="/"</script></head></html>')
+            self.redirect('/')
             return
 
         uid = self.auth.decodeData(cookie)['uid']

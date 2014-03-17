@@ -1,8 +1,8 @@
 #post_list {
-  width:800px;
+  width:100%;
 }
 .postlist_entry {
-  width:800px;
+  width:100%;
   overflow:hidden;
   height:100px;
   padding-right:20px;

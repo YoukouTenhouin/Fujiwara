@@ -31,5 +31,5 @@ renderer = BleepRenderer(flags = m.HTML_ESCAPE)
 md = Markdown(renderer,
                 extensions=m.EXT_FENCED_CODE | m.EXT_STRIKETHROUGH)
 
-def render(markdown):
-    return md.render(markdown)
+def render(txt):
+    return md.render(txt)

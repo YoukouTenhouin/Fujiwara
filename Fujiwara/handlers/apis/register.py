@@ -33,6 +33,6 @@ class Register(ApiBase):
 
         # Login
         cookie = self.auth.encodeData({"uid":uid})
-        self.set_cookie('userinfo',cookie)
+        self.set_cookie('userinfo',cookie,expires=datetime.datetime(3000,1,1))
         
         self.write({'success':True})

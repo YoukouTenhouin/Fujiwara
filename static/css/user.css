@@ -1,7 +1,6 @@
 #user_body{
   overflow:hidden;
-  width:1000px;
-  margin-left:100px;
+  min-width:800px;
   height:1200px;
 }
 

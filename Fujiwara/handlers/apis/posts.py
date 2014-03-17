@@ -1,19 +1,14 @@
 from Fujiwara.handlers.apis import ApiBase
+from Fujiwara.decorators import logind
 from bson.objectid import ObjectId
 
 import datetime
 
 class PostAdd(ApiBase):
-    def post(self):
+    @logind()
+    def post(self,user):
         now = datetime.datetime.now()
 
-        cookie = self.get_cookie('userinfo')
-        if not self.auth.vaild(cookie):
-            self.write({'success':False,'error':1})
-            return
-
-        uid = self.auth.decodeData(cookie)['uid']
-            
         content = self.get_argument('content')
         tid = self.get_argument('tid')
         replyto = self.get_argument('replyto')
@@ -23,7 +18,7 @@ class PostAdd(ApiBase):
         pid = self.mongo.posts.insert({'content':content,
                                        'datetime':now,
                                        'th':ObjectId(tid),
-                                       'author':uid,
+                                       'author':user['_id'],
                                        'replyto':replyto})
 
         self.mongo.threads.update(
@@ -34,15 +29,8 @@ class PostAdd(ApiBase):
         self.write({'success':True})
 
 class PostDel(ApiBase):
-    def post(self):
-        cookie = self.get_cookie('userinfo')
-        if not self.auth.vaild(cookie):
-            self.write({'success':False,'error':1})
-            return
-
-        uid = self.auth.decodeData(cookie)['uid']
-        user = self.mongo.users.find({'_id':uid})[0]
-            
+    @logind()
+    def post(self,user):
         if not 'admin' in user['jobs']:
             self.write({'success':False,'error':2})
             return
@@ -57,15 +45,8 @@ class PostDel(ApiBase):
         self.write({'success':True})
 
 class PostUpdate(ApiBase):
-    def post(self):
-        cookie = self.get_cookie('userinfo')
-        if not self.auth.vaild(cookie):
-            self.write({'success':False,'error':1})
-            return
-
-        uid = self.auth.decodeData(cookie)['uid']
-        user = self.mongo.users.find({'_id':uid})[0]
-        
+    @logind()
+    def post(self,user):
         pid = self.get_argument('pid')
         content = self.get_argument('content')
         

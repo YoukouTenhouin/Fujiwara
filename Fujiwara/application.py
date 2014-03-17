@@ -9,7 +9,7 @@ from Fujiwara.handlers.user import handlers as userpages
 from Fujiwara.auth import Auth
 
 class Application(tornado.web.Application):
-    def __init__(self,key):
+    def __init__(self,key,*args,**kwargs):
         handlers = apis
         handlers.extend(views)
         handlers.extend(userpages)
@@ -20,4 +20,4 @@ class Application(tornado.web.Application):
         self.auth = Auth(key)
         root = os.path.dirname(__file__)
         template_path = os.path.join(root,'../templates')
-        tornado.web.Application.__init__(self,handlers,template_path=template_path)
+        tornado.web.Application.__init__(self,handlers,template_path=template_path,*args,**kwargs)

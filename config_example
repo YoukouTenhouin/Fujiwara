@@ -1,0 +1,4 @@
+port=8080
+key='aaa'
+recaptcha_pubkey=''
+recaptcha_privkey=''

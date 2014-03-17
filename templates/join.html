@@ -1,0 +1,49 @@
+{% extends base.html %}
+
+{% block title %}注册{% end %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <h1>注册</h1>
+    {% if errors['user_exists'] %}
+    <div class="alert alert-danger">
+      用户名已存在。
+    </div>
+    {% end %}
+    {% if errors['captcha_unmatch'] %}
+    <div class="alert alert-danger">
+      验证码错误。
+    </div>
+    {% end %}
+    <form role="form" method="POST" action="/join">
+      <div class="form-group">
+        <label>用户名</label>
+        <input type="text" value="{{ fields['name'] }}" class="form-control" name="name" placeholder="User name" style="font-size:18px;" required>
+      </div>
+      <div class="form-group">
+        <label>密码</label>
+        <input type="password" class="form-control" name="pwd" placeholder="Password" style="font-size:18px;" required>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" value="{{ fields['email'] }}" class="form-control" name="email" placeholder="Email" style="font-size:18px;" required>
+      </div>
+      <div class="form-group">
+        <script type="text/javascript"
+                src="http://www.google.com/recaptcha/api/challenge?k={{ pubkey }}">
+        </script>
+        <noscript>
+          <iframe src="http://www.google.com/recaptcha/api/noscript?k={{ pubkey }}"
+                  height="300" width="500" frameborder="0"></iframe><br>
+          <textarea name="recaptcha_challenge_field" rows="3" cols="40">
+          </textarea>
+          <input type="hidden" name="recaptcha_response_field"
+                 value="manual_challenge">
+        </noscript>
+      </div>
+      <input type="submit" id="submit" class="btn btn-primary">
+    </form>
+  </div>
+</div>
+{% end %}

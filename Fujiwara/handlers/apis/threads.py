@@ -1,20 +1,14 @@
 from Fujiwara.handlers.apis.base import ApiBase
+from Fujiwara.decorators import logind
 from bson.objectid import ObjectId
 
 import datetime
 
 class ThreadAdd(ApiBase):
-    def post(self):
+    @logind()
+    def post(self,user):
         now = datetime.datetime.now()
 
-        cookie = self.get_cookie('userinfo')
-        if not self.auth.vaild(cookie):
-            self.write({'success':False,
-                        'error':1})
-            return
-
-        uid = self.auth.decodeData(cookie)['uid']
-            
         # Get arguments
         title = self.get_argument('title')
         content = self.get_argument('content')
@@ -31,7 +25,7 @@ class ThreadAdd(ApiBase):
                                          'lastreply':now,
                                          'tags':tags})
         
-        self.mongo.posts.insert({'author':uid,
+        self.mongo.posts.insert({'author':user['_id'],
                                  'datetime':now,
                                  'th':tid,
                                  'content':content})
@@ -39,15 +33,8 @@ class ThreadAdd(ApiBase):
         self.write({'success':True,'tid':str(tid)})
 
 class ThreadDel(ApiBase):
-    def post(self):
-        cookie = self.get_cookie('userinfo')
-        if not self.auth.vaild(cookie):
-            self.write({'success':False,'error':1})
-            return
-
-        uid = self.auth.decodeData(cookie)['uid']
-        user = self.mongo.users.find({'_id':uid})[0]
-        
+    @logind()
+    def post(self,user):
         if not 'admin' in user['jobs']:
             self.write({'success':False,'error':2})
             return
@@ -62,14 +49,8 @@ class ThreadDel(ApiBase):
         self.write({'success':True})
 
 class ThreadUpdate(ApiBase):
-    def post(self):
-        cookie = self.get_cookie('userinfo')
-        if not self.auth.vaild(cookie):
-            self.write({'success':False,'error':1})
-            return
-
-        uid = self.auth.decodeData(cookie)['uid']
-
+    @logind()
+    def post(self,user):
         tid = self.get_argument('tid')
         res = self.mongo.threads.find({'_id':ObjectId(tid)})
         if res.count() == 0:
@@ -82,7 +63,7 @@ class ThreadUpdate(ApiBase):
         title = self.get_argument('title')
             
         self.mongo.threads.update(
-            {'_id':ObjectId(tid),'author':uid},
+            {'_id':ObjectId(tid),'author':user['_id']},
             {'$set':{'title':title,'tags':tags}}
         );
         
