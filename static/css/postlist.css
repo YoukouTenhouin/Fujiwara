@@ -1,45 +1,49 @@
 #post_list {
-  width:100%;
+    width:100%;
 }
 .postlist_entry {
-  width:100%;
-  overflow:hidden;
-  height:100px;
-  padding-right:20px;
-  margin-bottom:10px;
-  background-color:#222;
-  transition: 0.2s ease-in-out;
+    vertical-align:top;
+    width:100%;
+    overflow:hidden;
+    height:50px;
+    padding-right:20px;
+    margin-bottom:3px;
+    background-color:#222;
+    transition: 0.1s ease-in-out;
+    box-shadow:2px 2px 2px black;
 }
 
 .postlist_entry img {
-  float:left;
-  width:100px;
-  height:100px;
+    float:left;
+    width:50px;
+    height:50px;
 }
 
 .postlist_entry a {
-  height:100%;
-  display:block;
-  color:#eee;
+    padding-left:60px;
+    margin-top:-8px;
+    height:50px;
+    display:block;
+    color:#eee;
 }
 
 .postlist_entry:hover {
-  transform:scale(1.1,1.1);
-  transition: 0.2s ease-in-out;
+    background-color:#225;
+    transition: 0.1s ease-in-out;
 }
 
 .postlist_entry a:hover{
-  text-decoration:none;
+    text-decoration:none;
 }
 
 .post_info{
-  font-size:0.7em;
+    font-size:0.7em;
 }
 
 .post_info_left {
-  float:left;
+    float:left;
 }
 
 .post_info_right {
-  float:right;
+    float:right;
 }

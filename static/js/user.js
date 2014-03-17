@@ -72,13 +72,11 @@ function user_ready(){
     $('#not_filled_alert').hide();
     
     $('#submit_login').click(login);
-    $('#submit_reg').click(register);
 
     $('#login_user').keyup(function(e){if(e.which == 13){$('#login_pwd').focus();}});
     $('#login_pwd').keyup(function(e){if(e.which == 13){login()}});
 
     $('#login_navbar').click(function(){$('#login_modal').modal()});
-    $('#reg_navbar').click(function(){$('#reg_modal').modal()});
     $('#logout_link').click(function(){$.post('/api/user/logout',check_login,async=false);});
 }
 

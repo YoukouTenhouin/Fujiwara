@@ -9,18 +9,19 @@
 {% block content %}
 {% import Fujiwara.avatar %}
 
-<ul id="post_list" type="none">
+<div id="post_list">
   {% for thread in threads %}
       {% set author = mongo.users.find({'_id':thread['author']})[0] %}
-  <li class="postlist_entry">
-    <img src="{{ Fujiwara.avatar.avatar(author) }}?size=100">
+  <div class="postlist_entry">
+    <img src="{{ Fujiwara.avatar.avatar(author) }}?size=50">
     <a href="/thread/view/{{ thread['_id'] }}">
-      <h4 class="post_title">{{ thread['title'] }}</h4>
-      <p class="post_info post_info_left">By {{ author['name'] }} on {{ thread['datetime'].ctime() }}</p>
-      <p class="post_info post_info_right">Lastreply on {{ thread['lastreply'].ctime() }}</p>
-    </a></li>
+    <h4 class="post_title">{{ thread['title'] }}</h4>
+    <p class="post_info post_info_left">By {{ author['name'] }} on {{ thread['datetime'].ctime() }}</p>
+    <p class="post_info post_info_right">Lastreply on {{ thread['lastreply'].ctime() }}</p>
+    </a>
+  </div>
   {% end %}
-</ul>
+</div>
 
 {% include pager.html %}
 

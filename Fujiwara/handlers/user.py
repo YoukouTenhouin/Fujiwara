@@ -32,11 +32,13 @@ class ReplyNotifications(Base):
         uid = self.auth.decodeData(cookie)['uid']
         user = self.mongo.users.find({'_id':uid})[0]
 
-        posts = [i for i in self.mongo.posts.find({
+        posts = self.mongo.posts.find({
             'author':{'$ne':uid},
             'replyto':uid,
-            'hidden':{'$ne':True}
-        })]
+            'hidden':{'$ne':True},
+        }).sort([('datetime',-1)])
+        
+        posts = [i for i in posts]
         
         count = len(posts)
         

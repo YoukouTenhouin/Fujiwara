@@ -1,6 +1,6 @@
 function thread_callback(json){
     if (json['success']){
-	window.location.pathname='/thread/view/'+tid+'#'+pid;
+	window.location.pathname='/thread/view/'+tid;
     } else {
 	if (json['error'] == 1){
 	    $('#edit_notlogin_alert').show();
