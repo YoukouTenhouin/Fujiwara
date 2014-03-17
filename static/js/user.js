@@ -45,31 +45,6 @@ function add_logout_callback(callback){
     }
 }
 
-function reg_callback(json){
-    if(json['success']){
-	$('#exists_alert').hide();
-	$('#not_filled_alert').hide();
-	$('#reg_modal').modal('hide');
-	check_login();
-    } else {
-	if(json['code'] == 1) {
-	    $('#not_filled_alert').hide();
-	    $('#exists_alert').show();
-	}
-	if(json['code'] == 2){
-	    $('#exists_alert').hide();
-	    $('#not_filled_alert').show();
-	}
-    }
-}	
-
-function register(){
-    user = $('#reg_user').val();
-    pwd = $('#reg_pwd').val();
-    email = $('#reg_email').val();
-    $.post('/api/user/register',{'user':user,'pwd':pwd,'email':email},reg_callback);
-}
-
 function login_callback(json){
     if(json['success']) {
 	$('#login_alert').hide();
@@ -102,10 +77,6 @@ function user_ready(){
     $('#login_user').keyup(function(e){if(e.which == 13){$('#login_pwd').focus();}});
     $('#login_pwd').keyup(function(e){if(e.which == 13){login()}});
 
-    $('#reg_email').keyup(function(e){if(e.which == 13){$('#reg_user').focus();}});
-    $('#reg_user').keyup(function(e){if(e.which == 13){$('#reg_pwd').focus();}});
-    $('#reg_pwd').keyup(function(e){if(e.which == 13){register();}});
-    
     $('#login_navbar').click(function(){$('#login_modal').modal()});
     $('#reg_navbar').click(function(){$('#reg_modal').modal()});
     $('#logout_link').click(function(){$.post('/api/user/logout',check_login,async=false);});
