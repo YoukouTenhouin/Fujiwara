@@ -1,0 +1,27 @@
+{% extends base.html %}
+
+{% block title %}全部{% end %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="/static/css/postlist.css">
+{% end %}
+
+{% block content %}
+{% import Fujiwara.avatar %}
+
+<ul id="post_list" type="none">
+  {% for thread in threads %}
+      {% set author = mongo.users.find({'_id':thread['author']})[0] %}
+      {% set category = mongo.categories.find({'_id':thread['category']})[0] %}
+  <li class="postlist_entry">
+    <a href="/thread/view/{{ thread['_id'] }}"><h4 class="post_title">{{ thread['title'] }}</h4></a>
+    <span>Category:<a href="/category/{{ category['_id'] }}">{{ category['parent'] }}/{{ category['name'] }}</a></span>
+    <p>By {{ author['name'] }} on {{ thread['datetime'].ctime() }} / Last reply on {{ thread['lastreply'].ctime() }}</p>
+  </li>
+  {% end %}
+  <br>
+</ul>
+
+{% include pager.html %}
+
+{% end %}

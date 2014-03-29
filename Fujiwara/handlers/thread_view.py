@@ -1,12 +1,12 @@
 import tornado.web
 
-from Fujiwara.handlers.views import ViewBase
+from Fujiwara.handlers import Base
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 
 POST_PER_PAGE = 30
 
-class RenderThread(ViewBase):
+class RenderThread(Base):
     def get(self,tid,page):
         try:
             if page == '':
@@ -21,12 +21,19 @@ class RenderThread(ViewBase):
         except InvalidId:
             raise tornado.web.HTTPError(404)
             
-        thread = self.mongo.threads.find({'_id':tid})[0]
+        res = self.mongo.threads.find({'_id':tid})
         
-        if thread == None:
+        if res.count() == 0:
             raise tornado.web.HTTPError(404)
-            
-        posts = self.mongo.posts.find({'th':tid,'hidden':{'$ne':True}}).sort([('datetime',1)])
+
+        thread = res[0]
+        if thread['hidden'] and self.user != None and 'admin' not in self.user['jobs']:
+            raise tornado.HTTPError(404)
+
+        if self.user!= None and 'admin' in self.user['jobs']:
+            posts = self.mongo.posts.find({'th':tid}).sort([('datetime',1)])
+        else:
+            posts = self.mongo.posts.find({'th':tid,'hidden':False}).sort([('datetime',1)])
 
         max_pn = (posts.count() - 1)//POST_PER_PAGE + 1
         print(max_pn)
@@ -41,4 +48,5 @@ class RenderThread(ViewBase):
                     thread = thread,
                     posts = posts,
                     pn = page,
-                    max_pn = max_pn)
+                    max_pn = max_pn,
+        )

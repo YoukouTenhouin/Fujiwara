@@ -1,5 +1,6 @@
 from tornado.httpclient import AsyncHTTPClient,HTTPRequest
 from tornado.httputil import urlencode
+from tornado.web import HTTPError
 from tornado.gen import coroutine
 
 def logind(not_logind_response={'success':False,'error':1}):
@@ -22,6 +23,26 @@ def logind(not_logind_response={'success':False,'error':1}):
         return ret
         # Function decorator end
     return decorator
+
+def login_requested(func):
+    def ret(self,*args,**kwargs):
+        if self.user == None:
+            self.redirect('/login')
+        else:
+            func(self,*args,**kwargs)
+
+    return ret
+
+def admin_requested(func):
+    @login_requested
+    def ret(self,*args,**kwargs):
+        if 'admin' not in self.user['jobs']:
+            self.redirect('/login')
+
+        else:
+            func(self,*args,**kwargs)
+
+    return ret
 
 def check_recaptcha(func):
     @coroutine

@@ -15,12 +15,12 @@
   
   <div id="sidebar">
     <div id="user_info"">
-      <span>{{ user['name'] }}</span><br>
+      <span style="color:#eee;">{{ user['name'] }}</span><br>
       <img src="{{ Fujiwara.avatar.avatar(user) }}?size=140">
     </div>
-    <ul id="sidebar_nav_links" class="nav nav-pills nav-stacked">
-      <li><a id="nav_settings" href='/user/reply'>回复提醒</a></li>
-    </ul>
+    <div id="sidebar_nav_links">
+      <a class="sidebar_nav_entry" href='/user/reply'>回复提醒</a>
+    </div>
   </div><!-- Sidebar -->
 
   <div id="content_wrapper">

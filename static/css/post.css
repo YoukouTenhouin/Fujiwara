@@ -1,28 +1,30 @@
 .post{
+    display:table;
     overflow:hidden;
     min-width:750px;
-    background-color:#222;
+    width:100%;
     margin-bottom:10px;
+    box-shadow:5px 5px 5px #ccc;
 }
 .post .author_info{
     text-align:center;
-    color:#777;
-    width:170px;
-    height:200px;
-    float:left;
+    color:#eee;
+    display:table-cell;
+    width:190px;
+    height:100%;
+    background-color:#008cba;
     padding:20px 10px 0 10px;
 }
 .post .post_body{
-    min-height:200px;
-    color:white;
-    margin-left:170px;
-    padding:0 10px 0 10px;
+    background-color:white;
+    display:table-cell;
+    vertical-align:top;
+    padding:0 10px;
     overflow:hidden;
-    background-color:#333;
 }
 .post .post_body .info_bar{
     font-size:0.9em;
-    color:#eee;
+    color:#777;
     height:50px;
     overflow:hidden;
 }

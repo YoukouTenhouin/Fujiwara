@@ -1,8 +1,10 @@
+{% if pn != 1 and pn < max_pn %}
 <ul class="pager">
   {% if pn != 1 %}
-  <li><a href="{{ pager_prefix }}/{{ pn - 1 }}"><</a></li>
+  <li><a href="{{ pager_prefix }}/{{ pn - 1 }}">&lt;Prev</a></li>
   {% end %}
   {% if pn < max_pn %}
-  <li><a href="{{ pager_prefix }}/{{ pn + 1 }}">></a></li>
+  <li><a href="{{ pager_prefix }}/{{ pn + 1 }}">Next&gt;</a></li>
   {% end %}
 </ul>
+{% end %}

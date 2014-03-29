@@ -1,10 +1,10 @@
-from Fujiwara.handlers.views import ViewBase
+from Fujiwara.handlers import Base
 from Fujiwara.decorators import check_recaptcha
 
 from hashlib import sha256
 from datetime import datetime
 
-class Join(ViewBase):
+class Join(Base):
     def get(self):
         fields = {
             'name':'',

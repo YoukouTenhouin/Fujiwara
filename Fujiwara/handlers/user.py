@@ -1,50 +1,40 @@
 import tornado.web
 
 from Fujiwara.handlers.base import Base
+from Fujiwara.decorators import login_requested
+
 from bson.objectid import ObjectId
 
-class User(Base):
-    def get(self):
-        cookie = self.get_cookie('userinfo')
-        if not self.auth.vaild(cookie):
-            self.redirect('/')
-            return
+REPLY_PER_PAGE=30
 
-        uid = self.auth.decodeData(cookie)['uid']
-        user = self.mongo.users.find({'_id':uid})[0]
-        
+class User(Base):
+    @login_requested
+    def get(self):
         self.render('user.html',
-                    user=user,
-                    pagetitle=user['name'])
+                    pagetitle=self.user['name'])
 
 class ReplyNotifications(Base):
-    def get(self,page = 1):
+    @login_requested
+    def get(self,page):
+        user = self.user
         if page == '':
             page = 1
         else:
             page = int(page)
             
-        cookie = self.get_cookie('userinfo')
-        if not self.auth.vaild(cookie):
-            self.redirect('/')
-            return
-
-        uid = self.auth.decodeData(cookie)['uid']
-        user = self.mongo.users.find({'_id':uid})[0]
-
         posts = self.mongo.posts.find({
-            'author':{'$ne':uid},
-            'replyto':uid,
+            'author':{'$ne':user['_id']},
+            'replyto':user['_id'],
             'hidden':{'$ne':True},
         }).sort([('datetime',-1)])
-        
-        posts = [i for i in posts]
-        
-        count = len(posts)
-        
-        skips = 10*(page - 1)
-        max_pn = (count-1)//10 + 1
 
+        count = posts.count()
+
+        skips = REPLY_PER_PAGE*(page - 1)
+        max_pn = (count-1)//REPLY_PER_PAGE + 1
+        
+        posts = [i for i in posts.skip(skips).limit(REPLY_PER_PAGE)]
+        
         tids = set([i['th'] for i in posts])
         aids = set([i['author'] for i in posts])
         threads = {}
@@ -58,7 +48,6 @@ class ReplyNotifications(Base):
         notifications = [(threads[i['th']],i,authors[i['author']]) for i in posts]
             
         self.render('replyto.html',
-                    user=user,
                     pn = page,
                     max_pn = max_pn,
                     notifications=notifications,
@@ -67,6 +56,5 @@ class ReplyNotifications(Base):
 
 handlers = [
     ('/user',User),
-    ('/user/reply',ReplyNotifications),
-    ('/user/reply/([0-9]+)',ReplyNotifications)
+    ('/user/reply/*([0-9]*)',ReplyNotifications)
 ]

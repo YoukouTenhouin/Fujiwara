@@ -3,36 +3,66 @@
 {% block title %}注册{% end %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-6">
-    <h1>注册</h1>
-    {% if errors['user_exists'] %}
-    <div class="alert alert-danger">
+<div id="form_wrapper">
+  <h1>注册</h1>
+
+  <h4>已有帐号？<a href="/login">登录</a></h4>
+  
+  {% if errors['user_exists'] %}
+  <div class="alert alert-danger">
       用户名已存在。
-    </div>
-    {% end %}
-    {% if errors['captcha_unmatch'] %}
-    <div class="alert alert-danger">
+  </div>
+  {% end %}
+  
+  {% if errors['captcha_unmatch'] %}
+  <div class="alert alert-danger">
       验证码错误。
+  </div>
+  {% end %}
+  
+  <form role="form" method="POST" action="/join">
+    <div class="form-group">
+      <label>用户名</label>
+      <input type="text" value="{{ fields['name'] }}" class="form-control" name="name" placeholder="User name" style="font-size:18px;" required>
     </div>
-    {% end %}
-    <form role="form" method="POST" action="/join">
-      <div class="form-group">
-        <label>用户名</label>
-        <input type="text" value="{{ fields['name'] }}" class="form-control" name="name" placeholder="User name" style="font-size:18px;" required>
-      </div>
-      <div class="form-group">
-        <label>密码</label>
-        <input type="password" class="form-control" name="pwd" placeholder="Password" style="font-size:18px;" required>
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" value="{{ fields['email'] }}" class="form-control" name="email" placeholder="Email" style="font-size:18px;" required>
-      </div>
-      <div class="form-group">
+    
+    <div class="form-group">
+      <label>密码</label>
+      <input type="password" class="form-control" name="pwd" placeholder="Password" style="font-size:18px;" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" value="{{ fields['email'] }}" class="form-control" name="email" placeholder="Email" style="font-size:18px;" required>
+    </div>
+    <div class="form-group">
+      <script type="text/javascript">
+      var RecaptchaOptions = {
+        theme : 'custom',
+        custom_theme_widget: 'recaptcha_widget'
+      };
+      </script>
+
+      <div id="recaptcha_widget" style="display:none">
+        <label>验证码</label>
+        <div id="recaptcha_image"></div>
+        <br>
+        <label class="recaptcha_only_if_image">输入图片中的字符:</label>
+        <label class="recaptcha_only_if_audio">输入你听到的数字:</label>
+        
+        <input type="text" class="form-control" id="recaptcha_response_field" name="recaptcha_response_field" />
+
+        <div class="btn-group">
+          <button class="btn btn-default" onclick="javascript:Recaptcha.reload()">换一个</button>
+          <button class="btn btn-default recaptcha_only_if_image" onclick="javascript:Recaptcha.switch_type('audio')">换音频</button>
+          <button class="btn btn-default recaptcha_only_if_audio" onclick="javascript:Recaptcha.switch_type('image')">换图片</button>
+        </div>
+
+
         <script type="text/javascript"
                 src="http://www.google.com/recaptcha/api/challenge?k={{ pubkey }}">
         </script>
+        
         <noscript>
           <iframe src="http://www.google.com/recaptcha/api/noscript?k={{ pubkey }}"
                   height="300" width="500" frameborder="0"></iframe><br>
@@ -41,9 +71,14 @@
           <input type="hidden" name="recaptcha_response_field"
                  value="manual_challenge">
         </noscript>
+        
       </div>
-      <input type="submit" id="submit" class="btn btn-primary">
-    </form>
-  </div>
+    </div>
+    
+    <div class="form-group">
+      <input type="submit" id="submit" value="注册" class="btn btn-primary">
+    </div>
+  </form>
 </div>
+
 {% end %}

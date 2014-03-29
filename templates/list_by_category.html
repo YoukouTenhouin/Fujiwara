@@ -1,0 +1,2 @@
+{% extends list.html %}
+{% block title %}{% set category = mongo.categories.find({'_id':cid})[0] %}Category:{{ category['parent'] }}/{{ category['name'] }}{% end %}

@@ -1,17 +1,17 @@
+body{
+    background-color:#eee;
+}
+
 header {
-    //color:#eee;
+    color:#eee;
     padding:65px 40px 20px 40px;
     margin-bottom:10px;
-    background-color:#222
+    background-color:#008cba;
 }
+
 footer {
     color:#888888;
     font-size:12px;
-}
-
-body {
-    //color:#eee;
-    //background-color:black;
 }
 
 #pagebody {
@@ -20,13 +20,10 @@ body {
     align:center;
 }
 
-.form-control {
-    background-color:#222;
-    color:#eee;
-    border-color:#333;
-}
-
-.modal-content {
-    //background-color:#222;
-    //color:#eee;
+#form_wrapper {
+  box-shadow:2px 2px 2px #aaa;
+  background-color:#fff;
+  width:600px;
+  padding:20px;
+  margin:auto;
 }

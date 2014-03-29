@@ -1,0 +1,53 @@
+{% extends base.html %}
+
+{% block title %}分类{% end %}
+
+{% block content %}
+<style>
+#categories {
+  margin:auto;
+}
+
+#categories li{
+  text-indent:2em;
+}
+
+#subcategories li a{
+  font-size: 15px;
+  text-indent: 2em;
+}
+
+</style>
+<ul type="none" id="categories">
+  {% set parents = mongo.categories.distinct('parent') %}
+  {% for parent in parents %}
+  <li>
+    <h4>{{ parent }}</h4>
+    <ul type="none" id="subcategories">
+    {% for category in mongo.categories.find({'parent':parent}) %}
+      <li><a href="/category/{{ category['_id'] }}">{{ category['name'] }}</a></li>
+    {% end %}
+    </ul>
+  {% end %}
+</ul>
+</ul>
+
+{% if user != None and 'admin' in user['jobs'] %}
+<div id="form_wrapper">
+  <h5>添加</h5>
+  <form class="form-inline" method="POST" action="/categories/new">
+    <div class="form-group">
+      <input name="parent" type="text" class="form-control">
+    </div>
+    <label>/</label>
+    <div class="form-group">
+      <input name="name" type="text" class="form-control">
+    </div>
+    <div class="form-group">
+      <input type="submit" value="添加" class="btn btn-primary">
+    </div>
+  </form>
+</div>
+{% end %}
+
+{% end %}

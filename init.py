@@ -3,20 +3,9 @@ from tornado.template import Loader
 
 l = Loader("templates")
 
-static_pages = [
-    "new.html"
-]
-
-print("Generating Static Pages...")
-
-for i in static_pages:
-    content = l.load(i).generate()
-    with open("static/html/" + i,"wb") as f:
-        f.write(content)
-
 print("Generating Error Pages....")
-e404 = l.load("404.html").generate()
-e50x = l.load("50x.html").generate()
+e404 = l.load("404.html").generate(user=None)
+e50x = l.load("50x.html").generate(user=None)
 
 with open("static/html/404.html","wb") as f:
     f.write(e404)

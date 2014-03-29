@@ -15,41 +15,66 @@
 <span class="label label-default">{{ tag }}</span>
 {% end %}
 
-<div id="thread_functions" style="margin-top:10px;">
-  <a id="btn-edit-thread" class="btn btn-primary" href="/thread/edit/{{ thread['_id'] }}" style="display:none;">编辑</a>
-  <button id="btn-hide-thread" class="btn btn-danger" style="display:none;">炸</button>
+{% set category = mongo.categories.find({'_id':thread['category']})[0] %}
+<h4>Category:<a href="/category/{{ category['_id'] }}">{{ category['parent'] }}/{{ category['name'] }}</a></h4>
+
+{% if user != None %}
+<div style="margin-top:10px;">
+  {% if user['_id'] == thread['author'] or 'admin' in user['jobs'] %}
+  <a class="btn btn-primary" href="/thread/edit/{{ thread['_id'] }}">编辑</a>
+  {% end %}
+  {% if 'admin' in user['jobs'] %}
+  {% if thread['hidden'] == True %}
+  <a class="btn btn-danger" href="/thread/recover/{{ thread['_id'] }}">恢复</a>
+  {% else %}
+  <a class="btn btn-danger" href="/thread/remove/{{ thread['_id'] }}">炸</a>
+  {% end %}
+  {% end %}
 </div>
+{% end %}
+
+{% set pager_prefix="/thread/view/" + str(thread['_id']) %}
+{% include pager.html %}
 
 <ul type="none" id="post_area" style="padding-top:20px;">
-  {% set floor = 30 * (pn - 1) + 1 %}
+  
+{% set floor = 30 * (pn - 1) + 1 %}
   <!-- post loop -->
-  {% for post in posts %}
+{% for post in posts %}
+  
   {% set author = mongo.users.find({'_id':post['author']})[0] %}
-  <li id="{{ str(post['_id']) }}" class="post_entry" data-post='{"_id":"{{ str(post['_id']) }}","floor":"{{ floor }}"}' data-author='{"_id":"{{ str(author['_id']) }}","name":"{{ author['name'] }}"}'>
-    
-    <div class="post">
-      
+  
+  <li id="{{ str(post['_id']) }}" class="post_entry">    
+    <div class="post">      
       <div class="author_info">
-
         <div class="author_image">
           <img src="http://www.gravatar.com/avatar/{{ hashlib.md5(author['email'].encode()).hexdigest() }}?size=140">
         </div>
         
         <div class="author">
           <span>{{ author['name'] }}</span>
-        </div>
-        
+        </div>        
       </div>
       
-      <div class="post_body">
-        
+      <div class="post_body">        
         <div class="info_bar">
           <p style="float:left;padding-top:20px;">{{ floor }}楼 {{ post['datetime'].ctime() }}</p>
+
+          {% if user != None %}
           <div style="float:right;padding-top:20px;">
-            <button class="btn btn-xs btn-hide-floor btn-danger" style="display:none;" ">炸</button>
-            <a class="btn btn-xs btn-edit-post btn-primary" style="display:none;" href="/post/edit/{{ str(post['_id']) }}">编辑</a>
-            <button class="btn btn-xs btn-primary btn-reply">回复</button>
+            {% if 'admin' in user['jobs'] %}
+            {% if post['hidden'] == True %}
+            <a class="btn btn-xs btn-hide-floor btn-danger" href="/post/recover/{{ post['_id'] }}">恢复</a>
+            {% else %}
+            <a class="btn btn-xs btn-hide-floor btn-danger" href="/post/remove/{{ post['_id'] }}">炸</a>
+            {% end %}
+            {% end %}
+            {% if user['_id'] == post['author'] or 'admin' in user['jobs'] %}
+            <a class="btn btn-xs btn-edit-post btn-primary" href="/post/edit/{{ str(post['_id']) }}">编辑</a>
+            {% end %}
+            <button onclick='createReply("{{ floor }}","{{ post['_id'] }}");' class="btn btn-xs btn-primary">回复</button>
           </div>
+          {% end %}
         </div>
         
         <div class="content" style="font-size:18px;">
@@ -69,23 +94,19 @@
   
   <!-- editor -->
   <li>
+    {% if user != None %}
     <div id="new_reply">
-      <div class="alert alert-danger" id="reply_nocontent_alert" style="display:none;">
-        <strong>请填写内容。</strong>你想说啥？写在下面。
-      </div>
-      <div class="alert alert-danger" id="reply_notlogin_alert" style="display:none;">
-        <strong>你没登录。</strong>请先登录再回贴。
-      </div>
-      <form role="form" id="reply_form">
+      <form role="form" method="POST" action="/reply/{{ thread['_id'] }}">
         <div class="form-group">
-          <textarea class="form-control" placeholder="Content" rows="7" style="font-size:18px;" id="reply_editarea"></textarea>
+          <textarea class="form-control" id="reply_area" name="content" placeholder="Content" rows="7" style="font-size:18px;" required></textarea>
         </div>
-        <div class="form-group" style="display:none;">
-          <input class="form-control" id="reply_to" value="{{ str(thread['author']) }}">
-        </div>
-        <button type="button" id="submit_reply" class="btn btn-primary">回复</button>
+        <input id="replyto" name="replyto" value="{{ str(thread['author']) }}" type="hidden">
+        <input type="submit" value="回复" class="btn btn-primary">
       </form>
     </div>
+    {% else %}
+    <div style="text-align:center;"><h4><a href="/login">登录</a>以回帖</h4></div>
+    {% end %}
   </li>
   <!-- editor end -->
 </ul>
@@ -94,29 +115,19 @@
 
 {% block custom_js %}
 <script>
-function reply_on_click() {
-  var author = $(this).parents('.post_entry').data()['author'];
-  var floor = $(this).parents('.post_entry').data()['post'].floor;
-  var editarea_orig_value = $('#reply_editarea').val();
-  if( editarea_orig_value != "" && editarea_orig_value.slice(-1) != '\n') editarea_orig_value+='\n';
-  $('#reply_editarea').val(editarea_orig_value+'回复 '+floor+'楼 '+author.name+':\n').focus();
-  var replyto_orig = $('#reply_to').val();
-  $('#reply_to').val(replyto_orig+','+author._id)
+function createReply(floor,replyto) {
+  origval = $('#replyto').val();
+  $('#replyto').val(origval + ',' + replyto);
+  reply_text = "回复" + floor +"楼:";
+  text = $('#reply_area').val();
+  if (text.length == 0 || text[text.length-1] == '\n') {
+    $('#reply_area').val(text+reply_text+'\n');
+  } else {
+    $('#reply_area').val(text+'\n'+reply_text+'\n');
+  }
+  $('#reply_area').focus();
 }
-  
-function set_reply_on_ready() {
-  $('.btn-reply').click(reply_on_click);
-}
-
-$(document).ready(set_reply_on_ready);
 </script>
-<script>
-var tid = "{{ str(thread['_id']) }}";
-var author_id = "{{ thread['author'] }}";
-</script>
-<script src="/static/js/reply.js"></script>
-<script src="/static/js/postman.js"></script>
-<script src="/static/js/editbtn.js"></script>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}

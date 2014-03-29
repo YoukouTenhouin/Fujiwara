@@ -6,11 +6,13 @@
 
 {% import Fujiwara.avatar %}
 
+{% set pager_prefix = "/user/reply" %}
+{% include pager.html %}
 <ul id="reply_list" type="none">
-      {% for i in notifications %}
-      {% set thread = i[0] %}
-      {% set author = i[2] %}
-      {% set post = i[1] %}
+{% for i in notifications %}
+  {% set thread = i[0] %}
+  {% set author = i[2] %}
+  {% set post = i[1] %}
   <li>
     <div class="replist_img">
       <img src="{{ Fujiwara.avatar.avatar(author) }}?size=80">
@@ -21,8 +23,9 @@
       </div>
     </a>
   </li>
-      {% end %}
+{% end %}
 </ul>
-    {% include pager.html %}
+
+{% include pager.html %}
 
 {% end %}
